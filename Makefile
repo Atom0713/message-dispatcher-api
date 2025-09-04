@@ -12,3 +12,22 @@ build_venv:
 
 run:
 	docker run --rm -p 8000:8000 $(APP_NAME):dev
+
+pytest:
+	docker run -it --rm $(APP_NAME):dev sh -c pytest .
+
+ruff-format:
+	docker run -it --rm $(APP_NAME):dev sh -c "ruff format"
+
+isort: 
+	docker run -it --rm $(APP_NAME):dev sh -c "ruff check --select I --fix"
+
+ruff-check:
+	docker run -it --rm $(APP_NAME):dev sh -c "ruff check ."
+
+ruff:
+	docker run -it --rm $(APP_NAME):dev sh -c "ruff check --fix ."
+
+fix: ruff ruff-format
+format: ruff-format
+check: ruff-check
