@@ -15,4 +15,4 @@ RUN pip install poetry==2.1.4 \
 
 COPY /app .
 
-CMD ["python"]
+CMD ["fastapi", "run", "src/service/app.py"]

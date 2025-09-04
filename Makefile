@@ -9,3 +9,6 @@ cli:
 build_venv:
 	pip install poetry=="2.1.4"
 	poetry install
+
+run:
+	docker run --rm -p 8000:8000 $(APP_NAME):dev
