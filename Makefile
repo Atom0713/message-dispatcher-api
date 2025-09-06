@@ -33,3 +33,9 @@ format: ruff-format
 check: ruff-check
 
 test: ruff-check pytest
+
+up:
+	docker compose up --build
+
+down:
+	docker compose down

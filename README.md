@@ -19,5 +19,29 @@ make run
 **Check if the app is running**
 
 ```bash
-curl http://127.0.0.1:8000/
+curl http://localhost:8000/api/v1/
+```
+
+## DEMO
+
+### Running the Service with Docker Compose
+
+#### Build and start the containers
+```bash
+make up
+```
+This will:
+- Start the FastAPI application (default at http://localhost:8000/api/v1/)
+- Start a local DynamoDB instance (accessible on port 8001)
+
+#### Access the API
+
+Once running, you can test the service:
+- API root: http://localhost:8000/api/v1/
+- Interactive API docs (Swagger UI): http://localhost:8000/docs
+- ReDoc docs: http://localhost:8000/redoc
+
+#### Stopping the containers
+```bash
+make down
 ```
