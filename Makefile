@@ -31,3 +31,5 @@ ruff:
 fix: ruff ruff-format
 format: ruff-format
 check: ruff-check
+
+test: ruff-check pytest
