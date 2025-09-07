@@ -41,7 +41,7 @@ lint.select = [
 lint.ignore = []
 
 # Same line length everywhere
-line-length = 88
+line-length = 120
 
 # Match Black style so check/format agree
 [tool.ruff.format]

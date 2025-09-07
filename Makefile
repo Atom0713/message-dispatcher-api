@@ -24,7 +24,7 @@ isort:
 	docker run --rm -v $(PWD):$(WORKDIR) $(APP_NAME):dev sh -c "ruff check --select I --fix"
 
 ruff-check:
-	docker run --rm -v $(PWD):$(WORKDIR) $(APP_NAME):dev sh -c "ruff check ."
+	docker run --rm -v $(PWD):$(WORKDIR) $(APP_NAME):dev sh -c "ruff check . && ruff format --check ."
 
 ruff:
 	docker run --rm -v $(PWD):$(WORKDIR) $(APP_NAME):dev sh -c "ruff check --fix ."
