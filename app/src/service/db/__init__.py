@@ -1,4 +1,5 @@
 import boto3
+
 from service.config import settings
 
 dynamodb = boto3.client(
