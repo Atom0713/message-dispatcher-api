@@ -1,6 +1,9 @@
 # message-dispatcher-api
 REST API for sending and retrieving messages
 
+## Assumptions
+- The following REST API is intended for internal use only
+
 ## 🚀 Getting Started
 
 ### Prerequisites

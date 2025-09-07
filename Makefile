@@ -1,4 +1,5 @@
 APP_NAME = message-dispatcher-api
+WORKDIR = /app
 
 build:
 	docker build -t $(APP_NAME):dev .
@@ -17,16 +18,16 @@ pytest:
 	docker run --rm $(APP_NAME):dev sh -c pytest .
 
 ruff-format:
-	docker run --rm $(APP_NAME):dev sh -c "ruff format"
+	docker run --rm -v $(PWD):$(WORKDIR) $(APP_NAME):dev sh -c "ruff format"
 
 isort: 
-	docker run --rm $(APP_NAME):dev sh -c "ruff check --select I --fix"
+	docker run --rm -v $(PWD):$(WORKDIR) $(APP_NAME):dev sh -c "ruff check --select I --fix"
 
 ruff-check:
-	docker run --rm $(APP_NAME):dev sh -c "ruff check ."
+	docker run --rm -v $(PWD):$(WORKDIR) $(APP_NAME):dev sh -c "ruff check . && ruff format --check ."
 
 ruff:
-	docker run --rm $(APP_NAME):dev sh -c "ruff check --fix ."
+	docker run --rm -v $(PWD):$(WORKDIR) $(APP_NAME):dev sh -c "ruff check --fix ."
 
 fix: ruff ruff-format
 format: ruff-format
