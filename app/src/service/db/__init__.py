@@ -1,6 +1,10 @@
 import boto3
+import structlog
+from botocore.exceptions import ClientError
 
 from service.config import settings
+
+logger = structlog.get_logger()
 
 dynamodb = boto3.client(
     "dynamodb",
@@ -11,19 +15,28 @@ dynamodb = boto3.client(
 )
 
 
-async def create_table() -> None:
-    # Create the DynamoDB table.
-    table = dynamodb.create_table(
-        TableName="recipient_messages",
-        KeySchema=[
-            {"AttributeName": "recipient_id", "KeyType": "HASH"},
-            {"AttributeName": "message_id", "KeyType": "RANGE"},
-        ],
-        AttributeDefinitions=[
-            {"AttributeName": "username", "AttributeType": "S"},
-            {"AttributeName": "last_name", "AttributeType": "S"},
-        ],
-    )
+def create_table() -> None:
+    try:
+        dynamodb.create_table(
+            TableName=settings.table_name,
+            KeySchema=[
+                {"AttributeName": "recipient_id", "KeyType": "HASH"},
+                {"AttributeName": "message_id", "KeyType": "RANGE"},
+            ],
+            AttributeDefinitions=[
+                {"AttributeName": "recipient_id", "AttributeType": "S"},
+                {"AttributeName": "message_id", "AttributeType": "S"},
+            ],
+            BillingMode="PAY_PER_REQUEST",
+        )
 
-    # Wait until the table exists.
-    table.wait_until_exists()
+        dynamodb.get_waiter("table_exists").wait(TableName=settings.table_name)
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "ResourceInUseException":
+            pass
+        else:
+            logger.exception(e)
+            raise
+
+
+create_table()
