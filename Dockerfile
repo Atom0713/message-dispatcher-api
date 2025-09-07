@@ -3,6 +3,7 @@ FROM python:3.13.7-slim
 WORKDIR /app
 
 ENV POETRY_VIRTUALENVS_CREATE=false
+ENV PYTHONPATH=/app/src
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl build-essential \
