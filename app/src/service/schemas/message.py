@@ -7,13 +7,8 @@ class MessageContent(BaseModel):
     content: str
 
 
-class Message(BaseModel):
-    message_id: str
-    content: str
-
-
 class Messages(BaseModel):
-    messages: list[Message]
+    messages: list[str]
 
 
 class MessagesQuery(BaseModel):

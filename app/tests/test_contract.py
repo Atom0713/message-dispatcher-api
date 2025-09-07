@@ -21,7 +21,7 @@ def test_delete_message(client: TestClient):
 
 
 def test_bulk_delete_messages(client: TestClient):
-    json_body = {"messages": [{"content": "dummy message", "message_id": "dummy_message_id"}]}
+    json_body = {"messages": ["dummy_message_id"]}
     response = client.post("/api/v1/recipients/dummy_recipient_id/messages/delete", json=json_body)
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
