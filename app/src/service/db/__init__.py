@@ -8,16 +8,16 @@ logger = structlog.get_logger()
 
 dynamodb = boto3.client(
     "dynamodb",
-    endpoint_url=settings.dynamodb_endpoint,
+    endpoint_url=settings.dynamodb_endpoint if settings.dynamodb_endpoint else None,
     region_name=settings.aws_region,
     aws_access_key_id=settings.aws_access_key_id,
     aws_secret_access_key=settings.aws_secret_access_key,
 )
 
 
-def create_table() -> None:
+def create_table(dynamodb_client) -> None:
     try:
-        dynamodb.create_table(
+        dynamodb_client.create_table(
             TableName=settings.table_name,
             KeySchema=[
                 {"AttributeName": "recipient_id", "KeyType": "HASH"},
@@ -30,7 +30,7 @@ def create_table() -> None:
             BillingMode="PAY_PER_REQUEST",
         )
 
-        dynamodb.get_waiter("table_exists").wait(TableName=settings.table_name)
+        dynamodb_client.get_waiter("table_exists").wait(TableName=settings.table_name)
     except ClientError as e:
         if e.response["Error"]["Code"] == "ResourceInUseException":
             pass
@@ -39,4 +39,4 @@ def create_table() -> None:
             raise
 
 
-create_table()
+# create_table(dynamodb)
