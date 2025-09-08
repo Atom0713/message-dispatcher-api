@@ -104,3 +104,21 @@ def test_get_all_with_date_filter_desc(setup_dynamodb):
     # Assert
     assert len(all_items) == 2
     assert all_items[0]["created_at"] > all_items[1]["created_at"]
+
+
+@mock_aws
+def test_delete_message(setup_dynamodb):
+    # Arrange
+    recipient_id: str = "dummy_recipient_id"
+    RecipientMessagesService().create(recipient_id, content="Dummy content")
+    # Act
+    query: MessagesQuery = MessagesQuery(
+        start_date=datetime.now(UTC) - timedelta(minutes=5), end_date=datetime.now(UTC), order=Ordering.DESC.value
+    )
+    all_items: list[dict] = RecipientMessagesService().get_all(recipient_id, query)
+    assert len(all_items) == 1
+    RecipientMessagesService().delete(recipient_id, all_items[0]["message_id"])
+    all_items: list[dict] = RecipientMessagesService().get_all(recipient_id, query)
+
+    # Assert
+    assert len(all_items) == 0
