@@ -36,9 +36,7 @@ def create_table(dynamodb_client) -> None:
                         {"AttributeName": "recipient_id", "KeyType": "HASH"},
                         {"AttributeName": "fetched", "KeyType": "RANGE"},
                     ],
-                    "Projection": {
-                        "ProjectionType": "ALL"
-                    },
+                    "Projection": {"ProjectionType": "ALL"},
                 }
             ],
         )

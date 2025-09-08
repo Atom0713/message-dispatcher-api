@@ -29,7 +29,7 @@ def test_bulk_delete_messages(client: TestClient):
 def test_fetch_new_messages(client: TestClient):
     response = client.get("/api/v1/recipients/dummy_recipient_id/messages/new")
     assert response.status_code == 200
-    assert response.json() == {"messages": [{"message_id": "dummy_message_id", "content": "dummy content"}]}
+    assert response.json() == {"messages": []}
 
 
 def test_fetch_messages_by_datetime_filter(client: TestClient):
