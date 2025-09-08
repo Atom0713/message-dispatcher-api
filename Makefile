@@ -15,7 +15,7 @@ run:
 	docker run --rm -p 8000:8000 $(APP_NAME):dev
 
 pytest:
-	docker run --rm $(APP_NAME):dev sh -c pytest .
+	docker run --rm $(APP_NAME):dev sh -c "pytest . --cov-report=term-missing --cov=service"
 
 ruff-format:
 	docker run --rm -v $(PWD):$(WORKDIR) $(APP_NAME):dev sh -c "ruff format"
