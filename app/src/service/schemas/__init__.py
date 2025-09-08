@@ -1,4 +1,4 @@
-from .message import MessageContent, Messages, MessagesQuery, RecipientMessage
+from .message import MessageContent, Messages, MessagesQuery, Ordering, RecipientMessage
 from .utility import query_params
 
 __all__ = [
@@ -7,4 +7,5 @@ __all__ = [
     "MessagesQuery",
     "query_params",
     "RecipientMessage",
+    "Ordering",
 ]
