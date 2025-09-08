@@ -4,7 +4,7 @@ from boto3.dynamodb.types import TypeDeserializer
 
 from service.config import settings
 from service.db import dynamodb
-from service.schemas import MessagesQuery, Ordering, RecipientMessage
+from service.schemas import Messages, MessagesQuery, Ordering, RecipientMessage
 from service.utility import DATETIME_FORMAT
 
 
@@ -95,5 +95,6 @@ class RecipinetMessagesModel:
             },
         )
 
-    def bulk_delete() -> None:
-        pass
+    def bulk_delete(self, recipient_id: str, messages: Messages) -> None:
+        for message_id in messages.messages:
+            self.delete(recipient_id, message_id)

@@ -3,7 +3,7 @@ from datetime import UTC, datetime, timedelta
 
 from moto import mock_aws
 from service.config import settings
-from service.schemas import MessagesQuery, Ordering
+from service.schemas import Messages, MessagesQuery, Ordering
 from service.services import RecipientMessagesService
 
 
@@ -118,6 +118,26 @@ def test_delete_message(setup_dynamodb):
     all_items: list[dict] = RecipientMessagesService().get_all(recipient_id, query)
     assert len(all_items) == 1
     RecipientMessagesService().delete(recipient_id, all_items[0]["message_id"])
+    all_items: list[dict] = RecipientMessagesService().get_all(recipient_id, query)
+
+    # Assert
+    assert len(all_items) == 0
+
+
+@mock_aws
+def test_bulk_delete_message(setup_dynamodb):
+    # Arrange
+    recipient_id: str = "dummy_recipient_id"
+    RecipientMessagesService().create(recipient_id, content="Dummy content")
+    RecipientMessagesService().create(recipient_id, content="Dummy content")
+    # Act
+    query: MessagesQuery = MessagesQuery(
+        start_date=datetime.now(UTC) - timedelta(minutes=5), end_date=datetime.now(UTC), order=Ordering.DESC.value
+    )
+    all_items: list[dict] = RecipientMessagesService().get_all(recipient_id, query)
+    assert len(all_items) == 2
+    messages_to_delete: list[str] = [item["message_id"] for item in all_items]
+    RecipientMessagesService().bulk_delete(recipient_id, Messages(messages=messages_to_delete))
     all_items: list[dict] = RecipientMessagesService().get_all(recipient_id, query)
 
     # Assert

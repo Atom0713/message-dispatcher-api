@@ -114,6 +114,7 @@ curl -X GET "http://localhost:8000/api/v1/recipients/dummy_recipient_id/messages
 ```
 
 **Fetch all messages with date filter**
+
 **NOTE:** Timestamps are in UTC so filter on now() - 2h
 ```bash
 curl -X GET "http://localhost:8000/api/v1/recipients/dummy_recipient_id/messages?start_date=2025-09-08T08:00:00&end_date=2025-09-08T12:00:00&order=asc"
@@ -122,6 +123,13 @@ curl -X GET "http://localhost:8000/api/v1/recipients/dummy_recipient_id/messages
 **Delete message**
 ```bash
 curl -X DELETE "http://localhost:8000/api/v1/recipients/dummy_recipient_id/messages/dummy_message_id"
+```
+
+**Bulk delete messages**
+```bash
+curl -X POST "http://localhost:8000/api/v1/recipients/dummy_recipient_id/messages/delete" \
+     -H "Content-Type: application/json" \
+     -d '{"messages": ["dummy_message_id"]}'
 ```
 #### Stopping the containers
 ```bash
