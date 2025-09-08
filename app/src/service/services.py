@@ -1,0 +1,18 @@
+import uuid
+
+import structlog
+
+from service.models.recipient_messages import RecipinetMessagesModel
+from service.schemas import RecipientMessage
+
+logger = structlog.get_logger()
+
+
+class RecipientMessagesService:
+    def create(self, recipient_id: str, content: str) -> None:
+        recipient_message: RecipientMessage = RecipientMessage(recipient_id, self._generate_message_id(), content)
+        RecipinetMessagesModel().save(recipient_message)
+        logger.info("Saved new message for recipient.")
+
+    def _generate_message_id(self) -> str:
+        return str(uuid.uuid4())
