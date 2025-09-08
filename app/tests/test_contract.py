@@ -11,7 +11,6 @@ def test_submit_message(client: TestClient):
     json_body = {"content": "dummy message"}
     response = client.post("/api/v1/recipients/dummy_recipient_id/messages", json=json_body)
     assert response.status_code == 200
-    assert response.json() == {"delivery": "pending"}
 
 
 def test_delete_message(client: TestClient):

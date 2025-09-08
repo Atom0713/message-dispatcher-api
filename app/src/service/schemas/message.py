@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import date, datetime
 
 from pydantic import BaseModel
@@ -14,3 +15,10 @@ class Messages(BaseModel):
 class MessagesQuery(BaseModel):
     start_date: datetime | date
     end_date: datetime | date
+
+
+@dataclass
+class RecipientMessage:
+    recipient_id: str
+    message_id: str
+    content: str
