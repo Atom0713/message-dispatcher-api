@@ -41,7 +41,7 @@ def test_get_new_action(setup_dynamodb):
     for item in new_items:
         response = dynamodb_client.query(
             TableName=settings.table_name,
-            IndexName="new_messages",
+            IndexName="new_messages_index",
             KeyConditionExpression="recipient_id = :rid AND fetched = :fetched",
             ExpressionAttributeValues={":rid": {"S": item["recipient_id"]}, ":fetched": {"N": "1"}},
         )
