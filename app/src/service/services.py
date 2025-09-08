@@ -16,3 +16,6 @@ class RecipientMessagesService:
 
     def _generate_message_id(self) -> str:
         return str(uuid.uuid4())
+
+    def get_new(self, recipient_id: str) -> list[dict]:
+        return RecipinetMessagesModel().get_new(recipient_id)

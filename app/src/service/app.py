@@ -8,8 +8,6 @@ from service.db import create_table, dynamodb
 from service.schemas import MessageContent, Messages, MessagesQuery, query_params
 from service.services import RecipientMessagesService
 
-app = FastAPI()
-
 api_v1_router = APIRouter(prefix="/api/v1")
 
 logger = structlog.get_logger()
@@ -19,6 +17,9 @@ logger = structlog.get_logger()
 async def lifespan(app: FastAPI):
     create_table(dynamodb)
     yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 @api_v1_router.get("/")
@@ -48,7 +49,11 @@ def bulk_delete_messages(recipient_id: str, messages: Messages) -> dict:
 
 @api_v1_router.get("/recipients/{recipient_id}/messages/new")
 def fetch_new_messages(recipient_id: str) -> dict:
-    return {"messages": [{"message_id": "dummy_message_id", "content": "dummy content"}]}
+    try:
+        return {"messages": RecipientMessagesService().get_new(recipient_id)}
+    except Exception as e:
+        logger.exception(e)
+        return JSONResponse(content={"message": "INTERNAL_SERVER_ERROR"}, status_code=500)
 
 
 @api_v1_router.get("/recipients/{recipient_id}/messages")

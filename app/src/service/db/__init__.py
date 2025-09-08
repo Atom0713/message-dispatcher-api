@@ -26,8 +26,19 @@ def create_table(dynamodb_client) -> None:
             AttributeDefinitions=[
                 {"AttributeName": "recipient_id", "AttributeType": "S"},
                 {"AttributeName": "message_id", "AttributeType": "S"},
+                {"AttributeName": "fetched", "AttributeType": "N"},
             ],
             BillingMode="PAY_PER_REQUEST",
+            GlobalSecondaryIndexes=[
+                {
+                    "IndexName": "new_messages",
+                    "KeySchema": [
+                        {"AttributeName": "recipient_id", "KeyType": "HASH"},
+                        {"AttributeName": "fetched", "KeyType": "RANGE"},
+                    ],
+                    "Projection": {"ProjectionType": "ALL"},
+                }
+            ],
         )
 
         dynamodb_client.get_waiter("table_exists").wait(TableName=settings.table_name)
@@ -37,6 +48,3 @@ def create_table(dynamodb_client) -> None:
         else:
             logger.exception(e)
             raise
-
-
-# create_table(dynamodb)

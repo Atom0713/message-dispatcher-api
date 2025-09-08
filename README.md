@@ -99,6 +99,20 @@ Once running, you can test the service:
 - Interactive API docs (Swagger UI): http://localhost:8000/docs
 - ReDoc docs: http://localhost:8000/redoc
 
+----
+
+#### Example Usage with curl
+**Submit a message**
+```bash
+curl -X POST "http://localhost:8000/api/v1/recipients/dummy_recipient_id/messages" \
+     -H "Content-Type: application/json" \
+     -d '{"content": "dummy message"}'
+```
+**Fetch new messages**
+```bash
+curl -X GET "http://localhost:8000/api/v1/recipients/dummy_recipient_id/messages/new"
+```
+
 #### Stopping the containers
 ```bash
 make down
