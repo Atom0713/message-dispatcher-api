@@ -1,11 +1,12 @@
+from contextlib import asynccontextmanager
+
 import structlog
 from fastapi import APIRouter, Depends, FastAPI, Response
 from fastapi.responses import JSONResponse
 
+from service.db import create_table, dynamodb
 from service.schemas import MessageContent, Messages, MessagesQuery, query_params
 from service.services import RecipientMessagesService
-from service.db import create_table, dynamodb
-from contextlib import asynccontextmanager
 
 app = FastAPI()
 
