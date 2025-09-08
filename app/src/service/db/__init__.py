@@ -27,17 +27,26 @@ def create_table(dynamodb_client) -> None:
                 {"AttributeName": "recipient_id", "AttributeType": "S"},
                 {"AttributeName": "message_id", "AttributeType": "S"},
                 {"AttributeName": "fetched", "AttributeType": "N"},
+                {"AttributeName": "created_at", "AttributeType": "S"},
             ],
             BillingMode="PAY_PER_REQUEST",
             GlobalSecondaryIndexes=[
                 {
-                    "IndexName": "new_messages",
+                    "IndexName": "new_messages_index",
                     "KeySchema": [
                         {"AttributeName": "recipient_id", "KeyType": "HASH"},
                         {"AttributeName": "fetched", "KeyType": "RANGE"},
                     ],
                     "Projection": {"ProjectionType": "ALL"},
-                }
+                },
+                {
+                    "IndexName": "message_date_filter_index",
+                    "KeySchema": [
+                        {"AttributeName": "recipient_id", "KeyType": "HASH"},
+                        {"AttributeName": "created_at", "KeyType": "RANGE"},
+                    ],
+                    "Projection": {"ProjectionType": "ALL"},
+                },
             ],
         )
 

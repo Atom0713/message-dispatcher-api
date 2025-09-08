@@ -113,6 +113,12 @@ curl -X POST "http://localhost:8000/api/v1/recipients/dummy_recipient_id/message
 curl -X GET "http://localhost:8000/api/v1/recipients/dummy_recipient_id/messages/new"
 ```
 
+**Fetch all messages with date filter**
+**NOTE:** Timestamps are in UTC so filter on now() - 2h
+```bash
+curl -X GET "http://localhost:8000/api/v1/recipients/dummy_recipient_id/messages?start_date=2025-09-08T08:00:00&end_date=2025-09-08T12:00:00&order=asc"
+```
+
 #### Stopping the containers
 ```bash
 make down

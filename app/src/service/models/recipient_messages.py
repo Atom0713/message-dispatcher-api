@@ -4,7 +4,7 @@ from boto3.dynamodb.types import TypeDeserializer
 
 from service.config import settings
 from service.db import dynamodb
-from service.schemas import RecipientMessage
+from service.schemas import MessagesQuery, Ordering, RecipientMessage
 from service.utility import DATETIME_FORMAT
 
 
@@ -47,7 +47,7 @@ class RecipinetMessagesModel:
     def _get_new(self, recipient_id: str) -> list[dict]:
         response = dynamodb.query(
             TableName=settings.table_name,
-            IndexName="new_messages",
+            IndexName="new_messages_index",
             KeyConditionExpression="recipient_id = :rid AND fetched = :fetched",
             ExpressionAttributeValues={":rid": {"S": f"{self.PK_PREFIX}{recipient_id}"}, ":fetched": {"N": "0"}},
         )
@@ -68,8 +68,23 @@ class RecipinetMessagesModel:
         """Convert a DynamoDB item dict into a plain Python dict."""
         return {k: self.deserializer.deserialize(v) for k, v in dynamo_item.items()}
 
-    def get_all_by_date() -> None:
-        pass
+    def get_all_with_filter(self, recipient_id: str, query: MessagesQuery) -> None:
+        items: list[dict] = self._get_all_with_date_filter(recipient_id, query)
+        return [self._clean_item(item) for item in items]
+
+    def _get_all_with_date_filter(self, recipient_id: str, query: MessagesQuery) -> list[dict]:
+        response = dynamodb.query(
+            TableName=settings.table_name,
+            IndexName="message_date_filter_index",
+            KeyConditionExpression="recipient_id = :rid AND created_at BETWEEN :start AND :end",
+            ExpressionAttributeValues={
+                ":rid": {"S": f"{self.PK_PREFIX}{recipient_id}"},
+                ":start": {"S": query.start_date.strftime(DATETIME_FORMAT)},
+                ":end": {"S": query.end_date.strftime(DATETIME_FORMAT)},
+            },
+            ScanIndexForward=True if query.order == Ordering.ASC.value else False,
+        )
+        return response.get("Items", [])
 
     def delete() -> None:
         pass

@@ -58,7 +58,11 @@ def fetch_new_messages(recipient_id: str) -> dict:
 
 @api_v1_router.get("/recipients/{recipient_id}/messages")
 def fetch_messages_by_filter(recipient_id: str, query: MessagesQuery = Depends(query_params)) -> dict:
-    return {"messages": [{"message_id": "dummy_message_id", "content": "dummy content"}]}
+    try:
+        return {"messages": RecipientMessagesService().get_all(recipient_id, query)}
+    except Exception as e:
+        logger.exception(e)
+        return JSONResponse(content={"message": "INTERNAL_SERVER_ERROR"}, status_code=500)
 
 
 app.include_router(api_v1_router)

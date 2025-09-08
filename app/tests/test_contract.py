@@ -37,10 +37,12 @@ def test_fetch_messages_by_datetime_filter(client: TestClient):
         "/api/v1/recipients/dummy_recipient_id/messages?start_date=2025-09-01T10:00:00&end_date=2025-09-07T10:00:00"
     )
     assert response.status_code == 200
-    assert response.json() == {"messages": [{"message_id": "dummy_message_id", "content": "dummy content"}]}
+    assert response.json() == {"messages": []}
 
 
 def test_fetch_messages_by_date_filter(client: TestClient):
-    response = client.get("/api/v1/recipients/dummy_recipient_id/messages?start_date=2025-09-01&end_date=2025-09-07")
+    response = client.get(
+        "/api/v1/recipients/dummy_recipient_id/messages?start_date=2025-09-01&end_date=2025-09-07&order=asc"
+    )
     assert response.status_code == 200
-    assert response.json() == {"messages": [{"message_id": "dummy_message_id", "content": "dummy content"}]}
+    assert response.json() == {"messages": []}

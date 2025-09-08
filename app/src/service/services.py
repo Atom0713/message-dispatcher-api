@@ -3,7 +3,7 @@ import uuid
 import structlog
 
 from service.models.recipient_messages import RecipinetMessagesModel
-from service.schemas import RecipientMessage
+from service.schemas import MessagesQuery, RecipientMessage
 
 logger = structlog.get_logger()
 
@@ -19,3 +19,6 @@ class RecipientMessagesService:
 
     def get_new(self, recipient_id: str) -> list[dict]:
         return RecipinetMessagesModel().get_new(recipient_id)
+
+    def get_all(self, recipient_id: str, query: MessagesQuery) -> list[dict]:
+        return RecipinetMessagesModel().get_all_with_filter(recipient_id, query)
