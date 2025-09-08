@@ -39,7 +39,13 @@ def submit_message(recipient_id: str, message_content: MessageContent) -> dict:
 
 @api_v1_router.delete("/recipients/{recipient_id}/messages/{message_id}")
 def delete_message(recipient_id: str, message_id: str) -> dict:
-    return {"status": "ok"}
+    try:
+        RecipientMessagesService().delete(recipient_id, message_id)
+        logger.info("Deleted message for recipient.", message_id=message_id, recipient_id=recipient_id)
+        return Response(status_code=200)
+    except Exception as e:
+        logger.exception(e)
+        return JSONResponse(content={"message": "INTERNAL_SERVER_ERROR"}, status_code=500)
 
 
 @api_v1_router.post("/recipients/{recipient_id}/messages/delete")

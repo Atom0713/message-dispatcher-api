@@ -22,3 +22,6 @@ class RecipientMessagesService:
 
     def get_all(self, recipient_id: str, query: MessagesQuery) -> list[dict]:
         return RecipinetMessagesModel().get_all_with_filter(recipient_id, query)
+
+    def delete(self, recipient_id: str, message_id: str) -> None:
+        return RecipinetMessagesModel().delete(recipient_id, message_id)

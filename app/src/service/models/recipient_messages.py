@@ -86,8 +86,14 @@ class RecipinetMessagesModel:
         )
         return response.get("Items", [])
 
-    def delete() -> None:
-        pass
+    def delete(self, recipient_id: str, message_id: str) -> None:
+        dynamodb.delete_item(
+            TableName=settings.table_name,
+            Key={
+                "recipient_id": {"S": f"{self.PK_PREFIX}{recipient_id}"},
+                "message_id": {"S": message_id},
+            },
+        )
 
     def bulk_delete() -> None:
         pass
