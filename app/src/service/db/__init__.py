@@ -37,7 +37,15 @@ def create_table(dynamodb_client) -> None:
                         {"AttributeName": "fetched", "KeyType": "RANGE"},
                     ],
                     "Projection": {"ProjectionType": "ALL"},
-                }
+                },
+                {
+                    "IndexName": "message_date_filter_index",
+                    "KeySchema": [
+                        {"AttributeName": "recipient_id", "KeyType": "HASH"},
+                        {"AttributeName": "created_at", "KeyType": "RANGE"},
+                    ],
+                    "Projection": {"ProjectionType": "ALL"},
+                },
             ],
         )
 
