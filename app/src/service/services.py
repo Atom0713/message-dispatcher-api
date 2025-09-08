@@ -3,7 +3,7 @@ import uuid
 import structlog
 
 from service.models.recipient_messages import RecipinetMessagesModel
-from service.schemas import MessagesQuery, RecipientMessage
+from service.schemas import Messages, MessagesQuery, RecipientMessage
 
 logger = structlog.get_logger()
 
@@ -25,3 +25,6 @@ class RecipientMessagesService:
 
     def delete(self, recipient_id: str, message_id: str) -> None:
         return RecipinetMessagesModel().delete(recipient_id, message_id)
+
+    def bulk_delete(self, recipient_id: str, messages: Messages) -> None:
+        return RecipinetMessagesModel().bulk_delete(recipient_id, messages)
